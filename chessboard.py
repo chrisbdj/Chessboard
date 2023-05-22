@@ -6,10 +6,6 @@ import datetime
 import neopixel
 import board
 
-
-pixels = neopixel.NeoPixel(board.D18, 64, pixel_order=neopixel.RGBW, brightness=0.8)
-x=0
-
 GPIO.setwarnings(False)
 
 class SN74LS165:
@@ -51,15 +47,20 @@ class SN74LS165:
         #return bytes_val
         return arr
 
+
+
+pixels = neopixel.NeoPixel(board.D18, 64, pixel_order=neopixel.RGBW, brightness=0.5)
+x=0
+
 def lightBoard(boardArr):
-    x = len(boardArr) 
-    for i in range(x):
+    a = len(boardArr) 
+    for i in range(a):
         if boardArr[i] == 0:
             #empty space
-            pixels[i] = (255, 102, 153)
+            pixels[i] = (102, 0, 255)
         else:
             #occupied space
-            pixels[i] = (153, 51, 255)
+            pixels[i] = (255, 51, 204)
 
 
 
