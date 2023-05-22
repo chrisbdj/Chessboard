@@ -41,15 +41,6 @@ class SN74LS165:
         # Loop to read each bit value from the serial out line of the SN74HC165N.
         for i in range(self.datawidth):
             bit = GPIO.input(self.data)
-            
-            if i < 64:
-                if bit == 0:
-                    pixels[i] = (220,0,0)
-                else:
-                    pixels[i] = (0,220,0)
-                    
-                    
-            
             arr.append(bit)
             # Pulse the clock: rising edge shifts the next bit.
             GPIO.output(self.clock, GPIO.HIGH)
@@ -60,6 +51,18 @@ class SN74LS165:
         #return bytes_val
         return arr
 
+def lightBoard(boardArr):
+    x = len(boardArr) 
+    for i in range(x):
+        if bit == 0:
+            #empty space
+            pixels[i] = (255, 102, 153)
+        else:
+            #occupied space
+            pixels[i] = (153, 51, 255)
+
+
+
 if __name__ == '__main__':
     # Use GPIO numbering:
     GPIO.setmode(GPIO.BCM)
@@ -68,9 +71,10 @@ if __name__ == '__main__':
     try:
         while True:
             bytes = shiftr.read_shift_regs()
+            lightBoard(bytes)
             print(bytes)
             print("")
-            time.sleep(0.01)
+            time.sleep(0.05)
     except KeyboardInterrupt:
         GPIO.cleanup()
 
