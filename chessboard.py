@@ -3,6 +3,7 @@ from __future__ import print_function
 import RPi.GPIO as GPIO
 import time
 import datetime
+import math
 import neopixel
 import board
 
