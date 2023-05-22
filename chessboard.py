@@ -60,7 +60,7 @@ def lightBoard(boardArr):
             pixels[i] = (102, 0, 255)
         else:
             #occupied space
-            pixels[i] = (255, 51, 204)
+            pixels[i] = (255, 0, 0)
 
 
 
