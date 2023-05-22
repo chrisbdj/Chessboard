@@ -57,10 +57,10 @@ def lightBoard(boardArr):
     for i in range(a):
         if boardArr[i] == 0:
             #occupied space
-            pixels[i] = (0, 102, 255)
+            pixels[i] = (179, 102, 255)
         else:
             #empty space
-            pixels[i] = (255, 0, 0)
+            pixels[i] = (255, 0, 102)
 
 
 
