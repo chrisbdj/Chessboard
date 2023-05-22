@@ -49,7 +49,6 @@ class SN74LS165:
         arr = []
         for i in range(self.datawidth):
             bit = GPIO.input(self.data)
-            #bytes_val |= bit << (self.datawidth - 1 - i)
             
             if i < 64:
                 if bit == 0:
