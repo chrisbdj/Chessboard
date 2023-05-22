@@ -55,12 +55,17 @@ x=0
 def lightBoard(boardArr):
     a = len(boardArr) 
     for i in range(a):
+        file=math.floor(i%8)
+        if (j % 2):
+            file=7-math.floor(i%8)
+        
+        led=(j*8)+file
         if boardArr[i] == 0:
             #occupied space
-            pixels[i] = (153, 0, 255)
+            pixels[led] = (51, 51, 191)
         else:
             #empty space
-            pixels[i] = (255, 0, 102)
+            pixels[led] = (255, 0, 102)
 
 
 
