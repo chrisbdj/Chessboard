@@ -54,7 +54,7 @@ class SN74LS165:
 def lightBoard(boardArr):
     x = len(boardArr) 
     for i in range(x):
-        if bit == 0:
+        if boardArr[i] == 0:
             #empty space
             pixels[i] = (255, 102, 153)
         else:
