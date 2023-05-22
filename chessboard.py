@@ -49,7 +49,7 @@ class SN74LS165:
 
 
 
-pixels = neopixel.NeoPixel(board.D18, 64, pixel_order=neopixel.RGBW, brightness=0.5)
+pixels = neopixel.NeoPixel(board.D18, 64, pixel_order=neopixel.GRBW, brightness=0.5)
 x=0
 
 def lightBoard(boardArr):
@@ -57,11 +57,10 @@ def lightBoard(boardArr):
     for i in range(a):
         if boardArr[i] == 0:
             #occupied space
-            pixels[i] = (102, 0, 255) #g, r, b
+            pixels[i] = (0, 102, 255)
         else:
             #empty space
-            
-            pixels[i] = (0, 0, 255)
+            pixels[i] = (255, 0, 0)
 
 
 
