@@ -110,9 +110,9 @@ def makeBoard(boardArr):
     arr1 = []
     for i in range(a):
         c = boardArr[i]
-        arr1 = arr1.append(c)
+        arr1.append(c)
         if b >= 8:     
-            arr = arr.append(arr1)
+            arr.append(arr1)
             arr1=[]
             b=0
         b += 1
