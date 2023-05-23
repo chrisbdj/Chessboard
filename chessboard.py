@@ -11,8 +11,8 @@ import board
 GPIO.setwarnings(False)
 
 class SN74LS165:
-    #pulse_time = .000005     # 5 microseconds
-    pulse_time = .000015625
+    pulse_time = .000005     # 5 microseconds
+    #pulse_time = .000015625
 
     def __init__(self, clock, latch, data, clock_enable, num_chips=1):
         self.latch = latch                 # AKA pload AKA PL, pin 1
@@ -100,10 +100,24 @@ def lightBoard(boardArr):
             #empty space
             pixels[led] = (255, 0, 102)
 
-        
-
+      
+def makeBoard(boardArr):
+    a = len(boardArr)
+    b = 0
+    arr= []
+    arr1=[]
+    #i is the sensor on the board 
+    for i in range(a):
+        arr1 = arr1.append(boardArr[a])
+        b+=1
+        if b>=8:     
+            arr = arr.append(arr1)
+            arr1=[]
+            b=0
+    return arr
 
 preBoard = []
+gameBoard = []
 if __name__ == '__main__':
     # Use GPIO numbering:
     GPIO.setmode(GPIO.BCM)
@@ -115,7 +129,8 @@ if __name__ == '__main__':
             if not arrays_equal(preBoard, shiftBoard):
                 lightBoard(shiftBoard)
                 preBoard = shiftBoard[:]
-                print(shiftBoard)
+                gameBoard = makeBoard(preBoard)
+                print(gameBoard)
                 print("")
 
             time.sleep(0.05)
