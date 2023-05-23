@@ -104,16 +104,15 @@ def lightBoard(boardArr):
 def makeBoard(boardArr):
     a = len(boardArr)
     b = 0
-    arr= []
-    arr1=[]
-    #i is the sensor on the board 
+    arr = []
+    arr1 = []
     for i in range(a):
         arr1 = arr1.append(boardArr[a])
-        b+=1
-        if b>=8:     
+        if b >= 8:     
             arr = arr.append(arr1)
             arr1=[]
             b=0
+        b += 1
     return arr
 
 preBoard = []
