@@ -12,8 +12,6 @@ GPIO.setwarnings(False)
 
 class SN74LS165:
     pulse_time = .000005     # 5 microseconds
-    #pulse_time = .000015625
-
     def __init__(self, clock, latch, data, clock_enable, num_chips=1):
         self.latch = latch                 # AKA pload AKA PL, pin 1
         self.clock = clock                 # AKA CP, pin 2
@@ -100,38 +98,34 @@ def lightBoard(boardArr):
             #empty space
             pixels[led] = (255, 0, 102)
 
+        #Light Predicted Move
 
-gameBoard = []
 
-def makeBoard(boardArr):
-    a = len(boardArr)
-    b = 0
-    arr = []
-    arr1 = []
-    for i in range(a):
-        c = boardArr[i]
-        arr1.append(c)
-        if b >= 8:     
-            arr.append(arr1)
-            arr1=[]
-            b=0
-        b += 1
-    return arr
+
+
+#Take arr and make it 2d
+def make2D(arr):
+    return [arr[i:i+8] for i in range(0, len(arr), 8)]
 
 preBoard = []
+gameBoard = []
 
 if __name__ == '__main__':
     # Use GPIO numbering:
     GPIO.setmode(GPIO.BCM)
-
+    #init game board shift registers
     shiftr = SN74LS165(clock=11, latch=7, data=9, clock_enable=8, num_chips=8)
     try:
         while True:
+            #build initial array of game board
             shiftBoard = shiftr.read_shift_regs()
+            #test if board has changed
             if not arrays_equal(preBoard, shiftBoard):
-                lightBoard(shiftBoard)
+                #update array for initial change test
                 preBoard = shiftBoard[:]
-                gameBoard = makeBoard(preBoard)
+                gameBoard = make2D(preBoard)
+
+                lightBoard(preBoard)
                 print(gameBoard)
                 print("")
 
