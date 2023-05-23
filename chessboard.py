@@ -100,23 +100,26 @@ def lightBoard(boardArr):
             #empty space
             pixels[led] = (255, 0, 102)
 
-      
+
+gameBoard = []
+
 def makeBoard(boardArr):
     a = len(boardArr)
     b = 0
     arr = []
     arr1 = []
     for i in range(a):
-        arr1 = arr1.append(boardArr[a])
+        c = boardArr[a]
+        arr1 = arr1.append(c)
         if b >= 8:     
             arr = arr.append(arr1)
             arr1=[]
             b=0
         b += 1
-    return arr
+    gameBoard = arr[:]
 
 preBoard = []
-gameBoard = []
+
 if __name__ == '__main__':
     # Use GPIO numbering:
     GPIO.setmode(GPIO.BCM)
@@ -128,7 +131,7 @@ if __name__ == '__main__':
             if not arrays_equal(preBoard, shiftBoard):
                 lightBoard(shiftBoard)
                 preBoard = shiftBoard[:]
-                gameBoard = makeBoard(preBoard)
+                makeBoard(preBoard)
                 print(gameBoard)
                 print("")
 
