@@ -116,7 +116,7 @@ def makeBoard(boardArr):
             arr1=[]
             b=0
         b += 1
-    gameBoard = arr[:]
+    return arr
 
 preBoard = []
 
@@ -131,7 +131,7 @@ if __name__ == '__main__':
             if not arrays_equal(preBoard, shiftBoard):
                 lightBoard(shiftBoard)
                 preBoard = shiftBoard[:]
-                makeBoard(preBoard)
+                gameBoard = makeBoard(preBoard)
                 print(gameBoard)
                 print("")
 
