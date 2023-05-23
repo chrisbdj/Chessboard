@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 import time
 import datetime
 import math
+import heapq
 import neopixel
 import board
 
@@ -48,6 +49,29 @@ class SN74LS165:
         #return bytes_val
         return arr
 
+def arrays_equal(A, B):
+    # If lengths of array are not equal means array are not equal
+    if len(A) != len(B):
+        return False
+
+    # Creating 2 heaps for 2 arrays
+    heap1 = list(A)
+    heap2 = list(B)
+
+    # Convert list into heap
+    heapq.heapify(heap1)
+    heapq.heapify(heap2)
+
+    # Traverse and check if the top elements of both the
+    # heaps are same or not
+    while heap1:
+        # If top elements are not same then return false
+        if heapq.heappop(heap1) != heapq.heappop(heap2):
+            return False
+
+    # If all elements were same.
+    return True
+
 
 
 pixels = neopixel.NeoPixel(board.D18, 64, pixel_order=neopixel.GRBW, brightness=0.5)
@@ -79,7 +103,7 @@ def lightBoard(boardArr):
         
 
 
-
+preBoard = []
 if __name__ == '__main__':
     # Use GPIO numbering:
     GPIO.setmode(GPIO.BCM)
@@ -87,10 +111,13 @@ if __name__ == '__main__':
     shiftr = SN74LS165(clock=11, latch=7, data=9, clock_enable=8, num_chips=8)
     try:
         while True:
-            bytes = shiftr.read_shift_regs()
-            lightBoard(bytes)
-            print(bytes)
-            print("")
+            shiftBoard = shiftr.read_shift_regs()
+            if not arrays_equal(preBoard, shiftBoard):
+                lightBoard(shiftBoard)
+                preBoard = shiftBoard[:]
+                print(shiftBoard)
+                print("")
+
             time.sleep(0.05)
     except KeyboardInterrupt:
         GPIO.cleanup()
