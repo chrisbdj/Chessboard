@@ -56,22 +56,27 @@ x=0
 def lightBoard(boardArr):
     a = len(boardArr) 
     j = 0
+    #i is the sensor on the board 
     for i in range(a):
+        #LED ROWS ARE REVERSED EVERY OTHER ROW IN HARDWARE, THIS IS COMPENSATING FOR THAT
         file=math.floor(i%8)
         if j % 2:
             file=7-math.floor(i%8)
-        
+        #led is the led which corresponds to i
         led=(j*8)+file
-
         if (i+1) % 8 == 0:
             j += 1
-      
+        #FINISH MATH FOR LED ROWS ARE REVERSED EVERY OTHER ROW IN HARDWARE
+
+        #Light Board Based on occupied spaces
         if boardArr[i] == 0:
             #occupied space
             pixels[led] = (51, 51, 191)
         else:
             #empty space
             pixels[led] = (255, 0, 102)
+
+        
 
 
 
