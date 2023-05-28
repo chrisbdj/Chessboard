@@ -71,6 +71,11 @@ def arrays_equal(A, B):
     return True
 
 
+#Take arr and make it 2d
+def make2D(arr):
+    return [arr[i:i+8] for i in range(0, len(arr), 8)]
+
+
 
 pixels = neopixel.NeoPixel(board.D18, 64, pixel_order=neopixel.GRBW, brightness=0.5)
 x=0
@@ -103,9 +108,7 @@ def lightBoard(boardArr):
 
 
 
-#Take arr and make it 2d
-def make2D(arr):
-    return [arr[i:i+8] for i in range(0, len(arr), 8)]
+
 
 preBoard = []
 gameBoard = []
