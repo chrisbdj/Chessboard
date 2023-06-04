@@ -105,7 +105,8 @@ def convertSensorToLED(num):
     if row %2 ==1: #if the column is an odd number
         column = 7 - column #reverse the column order for hardware sync
     converted_num = (row*8)+column #calculate it all back up to get the proper LED number
-    print("sensor:"+num+"    led:"+converted_num)
+    print("sensor:", num)
+    print("led:",converted_num)
     return converted_num
 
 def updateLED(led, state):
