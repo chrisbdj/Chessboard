@@ -123,13 +123,14 @@ def updateLED(num, state):
 
 def convertToCoordinate(num):
     rank = (num+1) % 8 #ranks and the horizontal rows which are numbered. 1-8 going up from white rook. 8 is now 0 in code.
-    if num==0:
-        num=8
+    if rank==0:
+        rank=8
+    
     
 
     letter=["a","b","c","d","e","f","g","h"]
     file=math.floor(num/8) #file is the vertical columns which are lettered a-h going from white rook across naturally
-
+    file=7-file
     result = letter[file]+str(rank)
 
     return result
