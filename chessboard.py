@@ -50,7 +50,7 @@ class SN74LS165:
 
 
 def startNewGame():
-    lightBoard()
+    lightBoard(preBoard)
 
 
 
@@ -119,8 +119,6 @@ def updateLED(led, state):
 def make2D(arr):
     return [arr[i:i+8] for i in range(0, len(arr), 8)]
 
-preBoard = []
-gameBoard = []
 
 
 def updateBoard(boardArr, updatedBoardArr):
@@ -140,6 +138,8 @@ def updateBoard(boardArr, updatedBoardArr):
 
 if __name__ == '__main__':
     gameState = False
+    preBoard = []
+    gameBoard = []
     # Use GPIO numbering:
     GPIO.setmode(GPIO.BCM)
     #init game board shift registers
