@@ -130,7 +130,7 @@ def convertToCoordinate(num):
     letter=["a","b","c","d","e","f","g","h"]
     file=math.floor(num/8) #file is the vertical columns which are lettered a-h going from white rook across naturally
 
-    result = letter[file]+rank
+    result = letter[file]+str(rank)
 
     return result
 
