@@ -10,8 +10,6 @@ import board
 
 GPIO.setwarnings(False)
 
-gameState = False
-
 class SN74LS165:
     pulse_time = .000005     # 5 microseconds
     def __init__(self, clock, latch, data, clock_enable, num_chips=1):
@@ -143,6 +141,7 @@ def updateBoard(boardArr, updatedBoardArr):
 
 
 if __name__ == '__main__':
+    gameState = False
     # Use GPIO numbering:
     GPIO.setmode(GPIO.BCM)
     #init game board shift registers
