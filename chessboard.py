@@ -105,9 +105,7 @@ def convertSensorToLED(num):
     XinColumn = num%8 #reduce where in the column the led will be
     if column%2==1: #detect if column is odd
        XinColumn = 7-XinColumn #reverse order if column is odd
-       converted_num = (column*8)+XinColumn
-    print("sensor:", num)
-    print("led:",converted_num)
+       converted_num = (column*8)+XinColumn#recalculate the new LED number with column reversed
     return converted_num
 
 def updateLED(num, state):
@@ -123,6 +121,21 @@ def updateLED(num, state):
         pixels[led] = (255, 0, 0)
 
 
+def convertToCoordinate(num):
+    rank = (num+1) % 8 #ranks and the horizontal rows which are numbered. 1-8 going up from white rook. 8 is now 0 in code.
+    if num==0:
+        num=8
+    
+
+    letter=["a","b","c","d","e","f","g","h"]
+    file=math.floor(num/8) #file is the vertical columns which are lettered a-h going from white rook across naturally
+
+    result = letter[file]+rank
+
+    return result
+
+
+
 #Take arr and make it 2d
 def make2D(arr):
     return [arr[i:i+8] for i in range(0, len(arr), 8)]
@@ -136,6 +149,11 @@ def updateBoard(boardArr, updatedBoardArr):
         sensorThatisDifferent = differences[i]
         updateLED(sensorThatisDifferent, updatedBoardArr[sensorThatisDifferent])
         print("update on sensor: ",sensorThatisDifferent, " with state: ", updatedBoardArr[sensorThatisDifferent])
+        coord = convertToCoordinate(sensorThatisDifferent)
+        print("Chess Coord of Raised Piece: ", coord)
+
+
+
 
     gameBoard = make2D(updatedBoardArr)
 
@@ -168,10 +186,6 @@ if __name__ == '__main__':
                 #update array for initial change test
                 preBoard = shiftBoard[:]
                 
-
-                
-                print(preBoard)
-                print("")
 
             time.sleep(0.05)
     except KeyboardInterrupt:
