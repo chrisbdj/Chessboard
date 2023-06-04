@@ -8,6 +8,11 @@ import heapq
 import neopixel
 import board
 
+gameState = False
+preBoard = []
+gameBoard = []
+
+
 GPIO.setwarnings(False)
 
 class SN74LS165:
@@ -99,7 +104,7 @@ def convertSensorToLED(num):
     column = (num -1) % 8 #calculate column index
     if row %2 ==1: #if the column is an odd number
         column = 7 - column #reverse the column order for hardware sync
-    converted_num = row*8+column+1 #calculate it all back up to get the proper LED number
+    converted_num = (row*8)+column #calculate it all back up to get the proper LED number
     return converted_num
 
 def updateLED(led, state):
@@ -137,9 +142,6 @@ def updateBoard(boardArr, updatedBoardArr):
 
 
 if __name__ == '__main__':
-    gameState = False
-    preBoard = []
-    gameBoard = []
     # Use GPIO numbering:
     GPIO.setmode(GPIO.BCM)
     #init game board shift registers
