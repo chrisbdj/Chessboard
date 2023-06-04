@@ -10,6 +10,8 @@ import board
 
 GPIO.setwarnings(False)
 
+gameState = False
+
 class SN74LS165:
     pulse_time = .000005     # 5 microseconds
     def __init__(self, clock, latch, data, clock_enable, num_chips=1):
@@ -47,7 +49,7 @@ class SN74LS165:
         #return bytes_val
         return arr
 
-gameState = False
+
 
 def startNewGame():
     if gameState == False:
