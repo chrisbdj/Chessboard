@@ -110,8 +110,8 @@ def convertSensorToLED(num):
     print("led:",converted_num)
     return converted_num
 
-def updateLED(led, state):
-    led = convertSensorToLED(led)
+def updateLED(num, state):
+    led = convertSensorToLED(num)
 
     if state==0: #square is occupied
         pixels[led] = (51, 51, 191)
@@ -134,7 +134,7 @@ def updateBoard(boardArr, updatedBoardArr):
     differences = whats_the_dif(boardArr, updatedBoardArr)
     for i in range(len(differences)):
         updateLED(differences[i], updatedBoardArr[i])
-        print("update on sensor: ",i, " with state: ", updatedBoardArr[i])
+        print("update on sensor: ",differences[i], " with state: ", updatedBoardArr[i])
 
     gameBoard = make2D(updatedBoardArr)
 
