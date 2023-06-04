@@ -133,9 +133,13 @@ def updateBoard(boardArr, updatedBoardArr):
     differences = []
     differences = whats_the_dif(boardArr, updatedBoardArr)
     for i in range(len(differences)):
-        updateLED(differences[i], updatedBoardArr[i])
-        print("update on sensor: ",differences[i], " with state: ", updatedBoardArr[i])
+        sensorThatisDifferent = differences[i]
+        updateLED(sensorThatisDifferent, updatedBoardArr[sensorThatisDifferent])
+        print("update on sensor: ",sensorThatisDifferent, " with state: ", updatedBoardArr[sensorThatisDifferent])
 
+
+    #update array for initial change test
+    preBoard = updatedBoardArr[:]
     gameBoard = make2D(updatedBoardArr)
 
 
@@ -164,8 +168,7 @@ if __name__ == '__main__':
             if not arrays_equal(preBoard, shiftBoard):
                 updateBoard(preBoard, shiftBoard)
 
-                #update array for initial change test
-                preBoard = shiftBoard[:]
+                
                 
 
                 
