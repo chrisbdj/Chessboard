@@ -115,11 +115,11 @@ def updateLED(num, state):
 
     if state==0: #square is occupied
         pixels[led] = (51, 51, 191)
-    elif state==1: #square is empty
+    if state==1: #square is empty
         pixels[led] = (255, 0, 102)
-    elif state==2: #square is a possible move
+    if state==2: #square is a possible move
         pixels[led] = (0, 0, 255)
-    elif state==3: #square is a possible take
+    if state==3: #square is a possible take
         pixels[led] = (255, 0, 0)
 
 
