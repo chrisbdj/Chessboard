@@ -8,6 +8,11 @@ import heapq
 import neopixel
 import board
 
+gameState = False
+preBoard = []
+gameBoard = []
+
+
 GPIO.setwarnings(False)
 
 class SN74LS165:
@@ -47,29 +52,31 @@ class SN74LS165:
         #return bytes_val
         return arr
 
+
+
+def startNewGame():
+    lightBoard(preBoard)
+
+
+
 def arrays_equal(A, B):
     # If lengths of array are not equal means array are not equal
     if len(A) != len(B):
         return False
+    
+    #Simple test if all values ate the same
+    if A == B:
+        return True
+    else: #they are not the same
+        return False
 
-    # Creating 2 heaps for 2 arrays
-    heap1 = list(A)
-    heap2 = list(B)
-
-    # Convert list into heap
-    heapq.heapify(heap1)
-    heapq.heapify(heap2)
-
-    # Traverse and check if the top elements of both the
-    # heaps are same or not
-    while heap1:
-        # If top elements are not same then return false
-        if heapq.heappop(heap1) != heapq.heappop(heap2):
-            return False
-
-    # If all elements were same.
-    return True
-
+def whats_the_dif(A, B):
+    differences = []
+    for i in range(len(A)):
+        if A[i] != B[i]:
+            differences.append(i)
+            
+    return differences
 
 #Take arr and make it 2d
 def make2D(arr):
@@ -85,52 +92,118 @@ def lightBoard(boardArr):
     j = 0
     #i is the sensor on the board 
     for i in range(a):
-        #LED ROWS ARE REVERSED EVERY OTHER ROW IN HARDWARE, THIS IS COMPENSATING FOR THAT
-        file=math.floor(i%8)
-        if j % 2:
-            file=7-math.floor(i%8)
-        #led is the led which corresponds to i
-        led=(j*8)+file
-        if (i+1) % 8 == 0:
-            j += 1
-        #FINISH MATH FOR LED ROWS ARE REVERSED EVERY OTHER ROW IN HARDWARE
-
         #Light Board Based on occupied spaces
         if boardArr[i] == 0:
             #occupied space
-            pixels[led] = (51, 51, 191)
+            updateLED(i, 0)
         else:
             #empty space
-            pixels[led] = (255, 0, 102)
+            updateLED(i, 1)
 
         #Light Predicted Move
 
 
+def convertSensorToLED(num):
+    #LED ROWS ARE REVERSED EVERY OTHER ROW IN HARDWARE, THIS IS COMPENSATING FOR THAT
+    converted_num = num; #led might be same as sensor
+    column = math.floor(num/8) #calculate column index
+    XinColumn = num%8 #reduce where in the column the led will be
+    if column%2==1: #detect if column is odd
+       XinColumn = 7-XinColumn #reverse order if column is odd
+       converted_num = (column*8)+XinColumn#recalculate the new LED number with column reversed
+    return converted_num
+
+def updateLED(num, state):
+    led = convertSensorToLED(num)
+
+    if state==0: #square is occupied
+        pixels[led] = (51, 51, 191)
+    elif state==1: #square is empty
+        pixels[led] = (255, 0, 102)
+    elif state==2: #square is a possible move
+        pixels[led] = (0, 0, 255)
+    elif state==3: #square is a possible take
+        pixels[led] = (255, 0, 0)
+
+
+def convertToCoordinate(num):
+    rank = (num+1) % 8 #ranks and the horizontal rows which are numbered. 1-8 going up from white rook. 8 is now 0 in code.
+    if rank==0:
+        rank=8
+    
+    
+
+    letter=["a","b","c","d","e","f","g","h"]
+    file=math.floor(num/8) #file is the vertical columns which are lettered a-h going from white rook across naturally
+    file=7-file
+    result = letter[file]+str(rank)
+
+    return result
+
+def convertCoordToSensor(coord):
+    #must be formatted letter number ex. d7
+    try:
+        letter=["a","b","c","d","e","f","g","h"]#alphabet for reference
+        letterToFind = str(coord[0]) #isolate the letter at start of string
+        idx = letter.index(letterToFind) #search for the isolated letter in the array
+        rank = coord[1]
+        idx = 7-idx
+        sensor = ((idx*8)-1)+int(rank) #calculate the sensor number from the coordinate.
+
+        return sensor
+    except ValueError:
+        return "letter cant be found"
+    
 
 
 
 
-preBoard = []
-gameBoard = []
+
+
+def updateBoard(boardArr, updatedBoardArr):
+    differences = []
+    differences = whats_the_dif(boardArr, updatedBoardArr)
+    for i in range(len(differences)):
+        sensorThatisDifferent = differences[i]
+        updateLED(sensorThatisDifferent, updatedBoardArr[sensorThatisDifferent])
+        print("update on sensor: ",sensorThatisDifferent, " with state: ", updatedBoardArr[sensorThatisDifferent])
+        coord = convertToCoordinate(sensorThatisDifferent)
+        print("Chess Coord of Raised Piece: ", coord)
+        print("we converted the coord above back to the sensor: ", convertCoordToSensor(coord))
+
+
+
+    gameBoard = make2D(updatedBoardArr)
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     # Use GPIO numbering:
     GPIO.setmode(GPIO.BCM)
     #init game board shift registers
     shiftr = SN74LS165(clock=11, latch=7, data=9, clock_enable=8, num_chips=8)
+
+    preBoard = shiftr.read_shift_regs()
+    #STARTGAME
+    if gameState == False:
+        startNewGame()
+        gameState = True
     try:
         while True:
             #build initial array of game board
             shiftBoard = shiftr.read_shift_regs()
             #test if board has changed
             if not arrays_equal(preBoard, shiftBoard):
+                updateBoard(preBoard, shiftBoard)
+
                 #update array for initial change test
                 preBoard = shiftBoard[:]
-                gameBoard = make2D(preBoard)
-
-                lightBoard(preBoard)
-                print(gameBoard)
-                print("")
+                
 
             time.sleep(0.05)
     except KeyboardInterrupt:
