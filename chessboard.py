@@ -137,16 +137,21 @@ def updateBoard(boardArr, updatedBoardArr):
 
 
 
+
+
+
+
+
 if __name__ == '__main__':
-    #STARTGAME
-    if gameState == False:
-        startNewGame()
-
-
     # Use GPIO numbering:
     GPIO.setmode(GPIO.BCM)
     #init game board shift registers
     shiftr = SN74LS165(clock=11, latch=7, data=9, clock_enable=8, num_chips=8)
+
+    preBoard = shiftr.read_shift_regs()
+    #STARTGAME
+    if gameState == False:
+        startNewGame()
     try:
         while True:
             #build initial array of game board
