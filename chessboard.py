@@ -137,13 +137,16 @@ def convertToCoordinate(num):
 
 def convertCoordToSensor(coord):
     #must be formatted letter number ex. d7
-    letter=["a","b","c","d","e","f","g","h"]#alphabet for reference
-    letterToFind = coord[0] #isolate the letter at start of string
-    index = letter.index[letterToFind] #search for the isolated letter in the array
-    rank = coord[1]
-    sensor = (index*8)+int(rank) #calculate the sensor number from the coordinate.
+    try:
+        letter=["a","b","c","d","e","f","g","h"]#alphabet for reference
+        letterToFind = coord[0] #isolate the letter at start of string
+        index = letter.index[letterToFind] #search for the isolated letter in the array
+        rank = coord[1]
+        sensor = (int(index)*8)+int(rank) #calculate the sensor number from the coordinate.
 
-    return sensor
+        return sensor
+    except ValueError:
+        return "letter cant be found"
     
 
 
@@ -162,7 +165,7 @@ def updateBoard(boardArr, updatedBoardArr):
         print("update on sensor: ",sensorThatisDifferent, " with state: ", updatedBoardArr[sensorThatisDifferent])
         coord = convertToCoordinate(sensorThatisDifferent)
         print("Chess Coord of Raised Piece: ", coord)
-        print("we converted the coord above back to the sensor: ", convertCoordToSensor(coord))
+        print("we converted the coord above back to the sensor: ", convertCoordToSensor(str(coord)))
 
 
 
