@@ -47,29 +47,33 @@ class SN74LS165:
         #return bytes_val
         return arr
 
+gameState = False
+
+def startNewGame():
+    if not gameState:
+        lightBoard()
+        gameState=True
+
+
+
 def arrays_equal(A, B):
     # If lengths of array are not equal means array are not equal
     if len(A) != len(B):
         return False
+    
+    #Simple test if all values ate the same
+    if A == B:
+        return True
+    else: #they are not the same
+        return False
 
-    # Creating 2 heaps for 2 arrays
-    heap1 = list(A)
-    heap2 = list(B)
-
-    # Convert list into heap
-    heapq.heapify(heap1)
-    heapq.heapify(heap2)
-
-    # Traverse and check if the top elements of both the
-    # heaps are same or not
-    while heap1:
-        # If top elements are not same then return false
-        if heapq.heappop(heap1) != heapq.heappop(heap2):
-            return False
-
-    # If all elements were same.
-    return True
-
+def whats_the_dif(A, B):
+    differences = []
+    for i in range(len(A)):
+        if A[i] != B[i]:
+            differences.append(i)
+            
+    return differences
 
 
 pixels = neopixel.NeoPixel(board.D18, 64, pixel_order=neopixel.GRBW, brightness=0.5)
@@ -80,27 +84,37 @@ def lightBoard(boardArr):
     j = 0
     #i is the sensor on the board 
     for i in range(a):
-        #LED ROWS ARE REVERSED EVERY OTHER ROW IN HARDWARE, THIS IS COMPENSATING FOR THAT
-        file=math.floor(i%8)
-        if j % 2:
-            file=7-math.floor(i%8)
-        #led is the led which corresponds to i
-        led=(j*8)+file
-        if (i+1) % 8 == 0:
-            j += 1
-        #FINISH MATH FOR LED ROWS ARE REVERSED EVERY OTHER ROW IN HARDWARE
-
         #Light Board Based on occupied spaces
         if boardArr[i] == 0:
             #occupied space
-            pixels[led] = (51, 51, 191)
+            updateLED(i, 0)
         else:
             #empty space
-            pixels[led] = (255, 0, 102)
+            updateLED(i, 1)
 
         #Light Predicted Move
 
 
+def convertSensorToLED(num):
+    #LED ROWS ARE REVERSED EVERY OTHER ROW IN HARDWARE, THIS IS COMPENSATING FOR THAT
+    row = (num-1)//8  #calculate row index
+    column = (num -1) % 8 #calculate column index
+    if row %2 ==1: #if the column is an odd number
+        column = 7 - column #reverse the column order for hardware sync
+    converted_num = row*8+column+1 #calculate it all back up to get the proper LED number
+    return converted_num
+
+def updateLED(led, state):
+    led = convertSensorToLED(led)
+
+    if state==0: #square is occupied
+        pixels[led] = (51, 51, 191)
+    elif state==1: #square is empty
+        pixels[led] = (255, 0, 102)
+    elif state==2: #square is a possible move
+        pixels[led] = (0, 0, 255)
+    elif state==3: #square is a possible take
+        pixels[led] = (255, 0, 0)
 
 
 #Take arr and make it 2d
@@ -110,7 +124,23 @@ def make2D(arr):
 preBoard = []
 gameBoard = []
 
+
+def updateBoard(boardArr, updatedBoardArr):
+    differences = []
+    differences = whats_the_dif(boardArr, updatedBoardArr)
+    for i in range(len(differences)):
+        updateLED(differences[i], updatedBoardArr[i])
+
+    gameBoard = make2D(updatedBoardArr)
+
+
+
 if __name__ == '__main__':
+    #STARTGAME
+    if not gameState:
+        startNewGame()
+
+
     # Use GPIO numbering:
     GPIO.setmode(GPIO.BCM)
     #init game board shift registers
@@ -121,12 +151,14 @@ if __name__ == '__main__':
             shiftBoard = shiftr.read_shift_regs()
             #test if board has changed
             if not arrays_equal(preBoard, shiftBoard):
+                updateBoard(preBoard, shiftBoard)
+
                 #update array for initial change test
                 preBoard = shiftBoard[:]
-                gameBoard = make2D(preBoard)
+                
 
-                lightBoard(preBoard)
-                print(gameBoard)
+                
+                print(preBoard)
                 print("")
 
             time.sleep(0.05)
