@@ -100,11 +100,12 @@ def lightBoard(boardArr):
 
 def convertSensorToLED(num):
     #LED ROWS ARE REVERSED EVERY OTHER ROW IN HARDWARE, THIS IS COMPENSATING FOR THAT
-    row = num/8  #calculate row index
-    column = num % 8 #calculate column index
-    if column ==1: #if the column is an odd number
-        column = 7 - column #reverse the column order for hardware sync
-    converted_num = (row*8)+column #calculate it all back up to get the proper LED number
+    converted_num = num; #led might be same as sensor
+    column = math.floor(num/8) #calculate column index
+    XinColumn = num%8 #reduce where in the column the led will be
+    if column%2==1: #detect if column is odd
+       XinColumn = 7-XinColumn #reverse order if column is odd
+       converted_num = (column*8)+XinColumn
     print("sensor:", num)
     print("led:",converted_num)
     return converted_num
