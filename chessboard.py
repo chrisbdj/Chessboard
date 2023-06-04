@@ -50,9 +50,9 @@ class SN74LS165:
 gameState = False
 
 def startNewGame():
-    if not gameState:
+    if gameState == False:
         lightBoard()
-        gameState=True
+        gameState = True
 
 
 
@@ -137,7 +137,7 @@ def updateBoard(boardArr, updatedBoardArr):
 
 if __name__ == '__main__':
     #STARTGAME
-    if not gameState:
+    if gameState == False:
         startNewGame()
 
 
