@@ -140,9 +140,9 @@ def convertCoordToSensor(coord):
     try:
         letter=["a","b","c","d","e","f","g","h"]#alphabet for reference
         letterToFind = coord[0] #isolate the letter at start of string
-        index = letter.index[letterToFind] #search for the isolated letter in the array
+        idx = letter.index[letterToFind] #search for the isolated letter in the array
         rank = coord[1]
-        sensor = (int(index)*8)+int(rank) #calculate the sensor number from the coordinate.
+        sensor = (int(idx)*8)+int(rank) #calculate the sensor number from the coordinate.
 
         return sensor
     except ValueError:
