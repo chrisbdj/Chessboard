@@ -100,11 +100,11 @@ def lightBoard(boardArr):
 
 def convertSensorToLED(num):
     #LED ROWS ARE REVERSED EVERY OTHER ROW IN HARDWARE, THIS IS COMPENSATING FOR THAT
-    row = (num-1)//8  #calculate row index
-    column = (num -1) % 8 #calculate column index
-    if row %2 ==2: #if the column is an odd number
+    row = num/8  #calculate row index
+    column = num % 8 #calculate column index
+    if column ==1: #if the column is an odd number
         column = 7 - column #reverse the column order for hardware sync
-    converted_num = (row*8)+column+1 #calculate it all back up to get the proper LED number
+    converted_num = (row*8)+column #calculate it all back up to get the proper LED number
     print("sensor:", num)
     print("led:",converted_num)
     return converted_num
@@ -133,6 +133,7 @@ def updateBoard(boardArr, updatedBoardArr):
     differences = whats_the_dif(boardArr, updatedBoardArr)
     for i in range(len(differences)):
         updateLED(differences[i], updatedBoardArr[i])
+        print("update on sensor: ",i, " with state: ", updatedBoardArr[i])
 
     gameBoard = make2D(updatedBoardArr)
 
