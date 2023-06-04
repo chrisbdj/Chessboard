@@ -142,6 +142,7 @@ def convertCoordToSensor(coord):
         letterToFind = str(coord[0]) #isolate the letter at start of string
         idx = letter.index(letterToFind) #search for the isolated letter in the array
         rank = coord[1]
+        idx = 7-idx
         sensor = (int(idx)*8)+int(rank) #calculate the sensor number from the coordinate.
 
         return sensor
