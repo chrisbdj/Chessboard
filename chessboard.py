@@ -115,11 +115,11 @@ def updateLED(num, state):
 
     if state==0: #square is occupied
         pixels[led] = (51, 51, 191)
-    if state==1: #square is empty
+    elif state==1: #square is empty
         pixels[led] = (255, 0, 102)
-    if state==2: #square is a possible move
+    elif state==2: #square is a possible move
         pixels[led] = (0, 0, 255)
-    if state==3: #square is a possible take
+    elif state==3: #square is a possible take
         pixels[led] = (255, 0, 0)
 
 
@@ -137,9 +137,6 @@ def updateBoard(boardArr, updatedBoardArr):
         updateLED(sensorThatisDifferent, updatedBoardArr[sensorThatisDifferent])
         print("update on sensor: ",sensorThatisDifferent, " with state: ", updatedBoardArr[sensorThatisDifferent])
 
-
-    #update array for initial change test
-    preBoard = updatedBoardArr[:]
     gameBoard = make2D(updatedBoardArr)
 
 
@@ -168,7 +165,8 @@ if __name__ == '__main__':
             if not arrays_equal(preBoard, shiftBoard):
                 updateBoard(preBoard, shiftBoard)
 
-                
+                #update array for initial change test
+                preBoard = shiftBoard[:]
                 
 
                 
