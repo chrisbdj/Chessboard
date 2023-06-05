@@ -205,13 +205,11 @@ def updateBoard(boardArr, updatedBoardArr):
         print("Chess Coord of Manipulated Piece: ", coord, "state:",updatedBoardArr[sensorThatisDifferent])
         print("we converted the coord above back to the sensor: ", convertCoordToSensor(coord))
         possible_moves = get_possible_moves(coord)
-        print("possible moves v2:", possible_moves)
         if updatedBoardArr[sensorThatisDifferent]== 1:
             #piece is picked up check moves
             piecesActivelyPickedUp.append(coord)
-            
-            
             for move in possible_moves:
+                print("possible moves v2:", move)
                 led = convertCoordToLED(move)
                 updateLED(led,2)
                 
@@ -222,6 +220,7 @@ def updateBoard(boardArr, updatedBoardArr):
                 idx = piecesActivelyPickedUp.index(coord) #search for coord of piece put down in actively picked up
                 piecesActivelyPickedUp.pop(idx)
                 for move in possible_moves:
+                    print("possible moves v2:", move)
                     led = convertCoordToLED(move)
                     updateLED(led,1)
 
