@@ -179,7 +179,7 @@ def get_possible_moves(coord):
     for move in moves_for_square: #iterate the moves array.
         move_str = move.uci()
         posi_moves = split_string(move_str, 2)
-        
+
     print("possible moves:", posi_moves)
     return posi_moves
 
@@ -210,8 +210,8 @@ def updateBoard(boardArr, updatedBoardArr):
             piecesActivelyPickedUp.append(coord)
             possible_moves = get_possible_moves(coord)
             
-            for j in range(len(possible_moves)):
-                led = convertCoordToLED(possible_moves[j])
+            for move in possible_moves:
+                led = convertCoordToLED(possible_moves[move])
                 updateLED(led,2)
                 
 
@@ -223,12 +223,10 @@ def updateBoard(boardArr, updatedBoardArr):
 
                 possible_moves = get_possible_moves(coord)
 
-                for j in range(len(possible_moves)):
-                    led = convertCoordToLED(possible_moves[j])
-                updateLED(led,1)
+                for move in possible_moves:
+                    led = convertCoordToLED(possible_moves[move])
+                    updateLED(led,1)
 
-                
-                #possible_moves = []
             else:
                 # Item not found in the list
                 print(coord," not found in actively raised pieces? maybe this is a take? ")
