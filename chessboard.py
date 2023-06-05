@@ -63,7 +63,7 @@ def startNewGame():
     #Light up the entire board
     lightBoard(preBoard)
     # Set up the board with a specific position
-    board.set_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+    gameBoard.set_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
 
 
 def arrays_equal(A, B):
@@ -221,11 +221,17 @@ def handleButtons(buttonsArr):
             move = chess.Move.from_uci("e2e4")  # Example move: Pawn from e2 to e4
             gameBoard.push(move) # Push the move to the board
 
+            piecesActivelyPickedUp = [] #clear pieces array if turn successful
+
     if buttonsArr[1] == 1:
         #blacks turn end button
         if not gameBoard.turn:
             move = chess.Move.from_uci("e2e4")  # Example move: Pawn from e2 to e4
             gameBoard.push(move) # Push the move to the board
+
+            piecesActivelyPickedUp = [] #clear pieces array if turn successful
+    
+    
     if buttonsArr[2] == 1:
         engine = chess.engine.SimpleEngine.popen_uci("path/to/stockfish")
 
