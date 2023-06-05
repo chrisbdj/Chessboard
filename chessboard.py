@@ -168,6 +168,8 @@ def convertCoordToLED(coord):
         return "Letter not found"
 
 
+def split_string(string, length):
+    return [string[i:i+length] for i in range(0, len(string), length)]
 
 
 
@@ -203,9 +205,11 @@ def updateBoard(boardArr, updatedBoardArr):
             for move in moves_for_square: #iterate the moves array.
                 
                 move_str = move.uci()
-                #led = convertCoordToLED(move_str)
-                #updateLED(led,2)
-                print("possible moves:",move_str)
+                split_moves = split_string(move_str, 2)
+                for i in range(len(split_moves)):
+                    led = convertCoordToLED(split_moves[i])
+                    updateLED(led,2)
+                    print("possible moves:",split_moves[i])
 
         if updatedBoardArr[sensorThatisDifferent] == 0:
             #piece is put down
