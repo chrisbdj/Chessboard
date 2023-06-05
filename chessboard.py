@@ -179,7 +179,8 @@ def get_possible_moves(coord):
     for move in moves_for_square: #iterate the moves array.
         move_str = move.uci()
         possible_moves = split_string(move_str, 2)
-        return possible_moves
+    
+    return possible_moves
 
 def updateLED(led, state):
 
