@@ -13,7 +13,6 @@ import chess.engine
 gameState = False
 preBoard = []
 piecesActivelyPickedUp = []
-possible_moves = []
 
 # Create a new chess board
 gameBoard = chess.Board()
@@ -187,7 +186,6 @@ def updateLED(led, state):
 
 
 def updateBoard(boardArr, updatedBoardArr):
-    global possible_moves
     differences = []
     differences = whats_the_dif(boardArr, updatedBoardArr)
     for i in range(len(differences)):
@@ -217,8 +215,16 @@ def updateBoard(boardArr, updatedBoardArr):
             #piece is put down
             if coord in piecesActivelyPickedUp:
                 
-                for j in range(len(possible_moves)):
-                    led = convertCoordToLED(possible_moves[j])
+                piecePickedUp = chess.parse_square(coord) # Convert the square string to the square value
+                legalMoves = gameBoard.legal_moves # Get the legal moves for the specific square
+                moves_for_square = [move for move in legalMoves if move.from_square == piecePickedUp] # Filter legal moves for the specific square
+                for move in moves_for_square: #iterate the moves array.
+                    
+                    move_str = move.uci()
+                    possible_moves = split_string(move_str, 2)
+
+                    for j in range(len(possible_moves)):
+                        led = convertCoordToLED(possible_moves[j])
                     updateLED(led,1)
 
                 idx = piecesActivelyPickedUp.index(coord) #search for coord of piece put down in actively picked up
