@@ -207,7 +207,8 @@ def updateBoard(boardArr, updatedBoardArr):
                 
                 move_str = move.uci()
                 possible_moves = split_string(move_str, 2)
-                for i in range(len(possible_moves)):
+                
+            for i in range(len(possible_moves)):
                     led = convertCoordToLED(possible_moves[i])
                     updateLED(led,2)
                     print("possible moves:",possible_moves[i])
