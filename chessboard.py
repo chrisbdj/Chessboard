@@ -177,10 +177,10 @@ def get_possible_moves(coord):
     legalMoves = gameBoard.legal_moves # Get the legal moves for the specific square
     moves_for_square = [move for move in legalMoves if move.from_square == piecePickedUp] # Filter legal moves for the specific square
     for move in moves_for_square: #iterate the moves array.
-        print(move)
         move_str = move.uci()
+        posi_moves.append(move_str)
     
-    posi_moves = split_string(move_str, 2)
+    
     print("possible moves:", posi_moves)
     return posi_moves
 
@@ -210,8 +210,9 @@ def updateBoard(boardArr, updatedBoardArr):
             #piece is picked up check moves
             piecesActivelyPickedUp.append(coord)
             for move in possible_moves:
-                print("possible moves v2:", move)
-                led = convertCoordToLED(move)
+                led = split_string(move, 2)
+                print("possible moves v2:", led[1])
+                led = convertCoordToLED(led[1])
                 updateLED(led,2)
                 
 
