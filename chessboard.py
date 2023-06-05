@@ -13,6 +13,7 @@ import chess.engine
 gameState = False
 preBoard = []
 piecesActivelyPickedUp = []
+possible_moves = []
 
 # Create a new chess board
 gameBoard = chess.Board()
@@ -184,7 +185,7 @@ def updateLED(led, state):
     elif state==3: #square is a possible take
         pixels[led] = (255, 0, 0)
 
-split_moves = []
+
 def updateBoard(boardArr, updatedBoardArr):
     differences = []
     
@@ -205,22 +206,22 @@ def updateBoard(boardArr, updatedBoardArr):
             for move in moves_for_square: #iterate the moves array.
                 
                 move_str = move.uci()
-                split_moves = split_string(move_str, 2)
-                for i in range(len(split_moves)):
-                    led = convertCoordToLED(split_moves[i])
+                possible_moves = split_string(move_str, 2)
+                for i in range(len(possible_moves)):
+                    led = convertCoordToLED(possible_moves[i])
                     updateLED(led,2)
-                    print("possible moves:",split_moves[i])
+                    print("possible moves:",possible_moves[i])
 
         if updatedBoardArr[sensorThatisDifferent] == 0:
             #piece is put down
             if coord in piecesActivelyPickedUp:
                 idx = piecesActivelyPickedUp.index(coord) #search for coord of piece put down in actively picked up
                 piecesActivelyPickedUp.pop(idx)
-                for i in range(len(split_moves)):
-                    led = convertCoordToLED(split_moves[i])
+                for i in range(len(possible_moves)):
+                    led = convertCoordToLED(possible_moves[i])
                     updateLED(led,1)
                 
-                split_moves = []
+                possible_moves = []
             else:
                 # Item not found in the list
                 print(coord," not found in actively raised pieces? maybe this is a take? ")
