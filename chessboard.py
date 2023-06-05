@@ -188,7 +188,7 @@ def updateLED(led, state):
 
 def updateBoard(boardArr, updatedBoardArr):
     differences = []
-    
+    possible_moves = possible_moves[:]
     differences = whats_the_dif(boardArr, updatedBoardArr)
     for i in range(len(differences)):
         sensorThatisDifferent = differences[i]
