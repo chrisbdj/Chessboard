@@ -192,8 +192,8 @@ def updateBoard(boardArr, updatedBoardArr):
     differences = whats_the_dif(boardArr, updatedBoardArr)
     for i in range(len(differences)):
         sensorThatisDifferent = differences[i]
-        print("update on sensor: ",sensorThatisDifferent, " with state: ", updatedBoardArr[sensorThatisDifferent])
         coord = convertToCoordinate(sensorThatisDifferent)
+        print("update on sensor: ",sensorThatisDifferent, " with state: ", updatedBoardArr[sensorThatisDifferent])
         print("Chess Coord of Raised Piece: ", coord)
         print("we converted the coord above back to the sensor: ", convertCoordToSensor(coord))
 
@@ -207,21 +207,22 @@ def updateBoard(boardArr, updatedBoardArr):
                 
                 move_str = move.uci()
                 possible_moves = split_string(move_str, 2)
-                
-            for i in range(len(possible_moves)):
-                    led = convertCoordToLED(possible_moves[i])
+
+                for j in range(len(possible_moves)):
+                    led = convertCoordToLED(possible_moves[j])
                     updateLED(led,2)
-                    print("possible moves:",possible_moves[i])
+                    print("possible moves:",possible_moves[j])
 
         if updatedBoardArr[sensorThatisDifferent] == 0:
             #piece is put down
             if coord in piecesActivelyPickedUp:
+                
+                for j in range(len(possible_moves)):
+                    led = convertCoordToLED(possible_moves[j])
+                    updateLED(led,1)
+
                 idx = piecesActivelyPickedUp.index(coord) #search for coord of piece put down in actively picked up
                 piecesActivelyPickedUp.pop(idx)
-                for i in range(len(possible_moves)):
-                    led = convertCoordToLED(possible_moves[i])
-                    updateLED(led,1)
-                
                 #possible_moves = []
             else:
                 # Item not found in the list
