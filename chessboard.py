@@ -100,12 +100,13 @@ def lightBoard(boardArr):
     #i is the sensor on the board 
     for i in range(a):
         #Light Board Based on occupied spaces
+        led = convertSensorToLED(i)
         if boardArr[i] == 0:
             #occupied space
-            updateLED(i, 0)
+            updateLED(led, 0)
         else:
             #empty space
-            updateLED(i, 1)
+            updateLED(led, 1)
 
         #Light Predicted Move
 
@@ -170,8 +171,7 @@ def convertCoordToLED(coord):
 
 
 
-def updateLED(num, state):
-    led = convertSensorToLED(num)
+def updateLED(led, state):
 
     if state==0: #square is occupied
         pixels[led] = (51, 51, 191)
@@ -188,7 +188,7 @@ def updateBoard(boardArr, updatedBoardArr):
     differences = whats_the_dif(boardArr, updatedBoardArr)
     for i in range(len(differences)):
         sensorThatisDifferent = differences[i]
-        updateLED(sensorThatisDifferent, updatedBoardArr[sensorThatisDifferent])
+        updateLED(convertSensorToLED(sensorThatisDifferent), updatedBoardArr[sensorThatisDifferent])
         print("update on sensor: ",sensorThatisDifferent, " with state: ", updatedBoardArr[sensorThatisDifferent])
         coord = convertToCoordinate(sensorThatisDifferent)
         print("Chess Coord of Raised Piece: ", coord)
