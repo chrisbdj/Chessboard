@@ -178,9 +178,9 @@ def get_possible_moves(coord):
     moves_for_square = [move for move in legalMoves if move.from_square == piecePickedUp] # Filter legal moves for the specific square
     for move in moves_for_square: #iterate the moves array.
         move_str = move.uci()
-        possible_moves = split_string(move_str, 2)
-    
-    return possible_moves
+        moves = split_string(move_str, 2)
+    print("possible moves:",moves)
+    return moves
 
 def updateLED(led, state):
 
@@ -208,11 +208,11 @@ def updateBoard(boardArr, updatedBoardArr):
             #piece is picked up check moves
             piecesActivelyPickedUp.append(coord)
             possible_moves = get_possible_moves(coord)
-
+            
             for j in range(len(possible_moves)):
                 led = convertCoordToLED(possible_moves[j])
                 updateLED(led,2)
-                print("possible moves:",possible_moves[j])
+                
 
         if updatedBoardArr[sensorThatisDifferent] == 0:
             #piece is put down
