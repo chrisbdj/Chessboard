@@ -198,7 +198,7 @@ def updateBoard(boardArr, updatedBoardArr):
             #piece is picked up check moves
             piecesActivelyPickedUp.append(coord)
             piecePickedUp = chess.parse_square(coord) # Convert the square string to the square value
-            legalMoves = board.legal_moves # Get the legal moves for the specific square
+            legalMoves = gameBoardlegal_moves # Get the legal moves for the specific square
             moves_for_square = [move for move in legalMoves if move.from_square == piecePickedUp] # Filter legal moves for the specific square
             for move in moves_for_square: #iterate the moves array.
                 print(move)
@@ -239,7 +239,7 @@ def handleButtons(buttonsArr):
         result = engine.play(gameBoard, chess.engine.Limit(time=2.0))
         suggested_move = result.move
 
-        print("Suggested move:", board.san(suggested_move))
+        print("Suggested move:", gameBoardsan(suggested_move))
 
         engine.quit()
 
