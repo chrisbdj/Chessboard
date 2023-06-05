@@ -177,8 +177,9 @@ def get_possible_moves(coord):
     legalMoves = gameBoard.legal_moves # Get the legal moves for the specific square
     moves_for_square = [move for move in legalMoves if move.from_square == piecePickedUp] # Filter legal moves for the specific square
     for move in moves_for_square: #iterate the moves array.
+        print(move)
         move_str = move.uci()
-        
+    
     posi_moves = split_string(move_str, 2)
     print("possible moves:", posi_moves)
     return posi_moves
