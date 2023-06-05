@@ -172,6 +172,14 @@ def split_string(string, length):
     return [string[i:i+length] for i in range(0, len(string), length)]
 
 
+def get_possible_moves(coord):
+    piecePickedUp = chess.parse_square(coord) # Convert the square string to the square value
+    legalMoves = gameBoard.legal_moves # Get the legal moves for the specific square
+    moves_for_square = [move for move in legalMoves if move.from_square == piecePickedUp] # Filter legal moves for the specific square
+    for move in moves_for_square: #iterate the moves array.
+        move_str = move.uci()
+        possible_moves = split_string(move_str, 2)
+        return possible_moves
 
 def updateLED(led, state):
 
@@ -180,7 +188,7 @@ def updateLED(led, state):
     elif state==1: #square is empty
         pixels[led] = (255, 0, 102)
     elif state==2: #square is a possible move
-        pixels[led] = (0, 0, 255)
+        pixels[led] = 186, 235, 52
     elif state==3: #square is a possible take
         pixels[led] = (255, 0, 0)
 
@@ -198,37 +206,26 @@ def updateBoard(boardArr, updatedBoardArr):
         if updatedBoardArr[sensorThatisDifferent]== 1:
             #piece is picked up check moves
             piecesActivelyPickedUp.append(coord)
-            piecePickedUp = chess.parse_square(coord) # Convert the square string to the square value
-            legalMoves = gameBoard.legal_moves # Get the legal moves for the specific square
-            moves_for_square = [move for move in legalMoves if move.from_square == piecePickedUp] # Filter legal moves for the specific square
-            for move in moves_for_square: #iterate the moves array.
-                
-                move_str = move.uci()
-                possible_moves = split_string(move_str, 2)
+            possible_moves = get_possible_moves(coord)
 
-                for j in range(len(possible_moves)):
-                    led = convertCoordToLED(possible_moves[j])
-                    updateLED(led,2)
-                    print("possible moves:",possible_moves[j])
+            for j in range(len(possible_moves)):
+                led = convertCoordToLED(possible_moves[j])
+                updateLED(led,2)
+                print("possible moves:",possible_moves[j])
 
         if updatedBoardArr[sensorThatisDifferent] == 0:
             #piece is put down
             if coord in piecesActivelyPickedUp:
-                
-                piecePickedUp = chess.parse_square(coord) # Convert the square string to the square value
-                legalMoves = gameBoard.legal_moves # Get the legal moves for the specific square
-                moves_for_square = [move for move in legalMoves if move.from_square == piecePickedUp] # Filter legal moves for the specific square
-                for move in moves_for_square: #iterate the moves array.
-                    
-                    move_str = move.uci()
-                    possible_moves = split_string(move_str, 2)
-
-                    for j in range(len(possible_moves)):
-                        led = convertCoordToLED(possible_moves[j])
-                    updateLED(led,1)
-
                 idx = piecesActivelyPickedUp.index(coord) #search for coord of piece put down in actively picked up
                 piecesActivelyPickedUp.pop(idx)
+
+                possible_moves = get_possible_moves(coord)
+
+                for j in range(len(possible_moves)):
+                    led = convertCoordToLED(possible_moves[j])
+                updateLED(led,1)
+
+                
                 #possible_moves = []
             else:
                 # Item not found in the list
