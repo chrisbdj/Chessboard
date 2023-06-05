@@ -223,8 +223,9 @@ def updateBoard(boardArr, updatedBoardArr):
                 idx = piecesActivelyPickedUp.index(coord) #search for coord of piece put down in actively picked up
                 piecesActivelyPickedUp.pop(idx)
                 for move in possible_moves:
-                    print("possible moves v2:", move)
-                    led = convertCoordToLED(move)
+                    led = split_string(move, 2)
+                    print("possible moves v2:", led[1])
+                    led = convertCoordToLED(led[1])
                     updateLED(led,1)
 
             else:
