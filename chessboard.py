@@ -201,13 +201,18 @@ def updateBoard(boardArr, updatedBoardArr):
             legalMoves = gameBoard.legal_moves # Get the legal moves for the specific square
             moves_for_square = [move for move in legalMoves if move.from_square == piecePickedUp] # Filter legal moves for the specific square
             for move in moves_for_square: #iterate the moves array.
-                print(move)
+                print("possible moves:",move)
+                updateLED(convertCoordToLED(move),2)
 
         if updatedBoardArr[sensorThatisDifferent] == 0:
             #piece is put down
+            if coord in piecesActivelyPickedUp:
+                idx = piecesActivelyPickedUp.index(coord) #search for coord of piece put down in actively picked up
+                piecesActivelyPickedUp.pop(idx)
+            else:
+                # Item not found in the list
+                print(coord," not found in actively raised pieces? maybe this is a take? ")
             
-            idx = piecesActivelyPickedUp.index(coord) #search for coord of piece put down in actively picked up
-            piecesActivelyPickedUp.pop(idx)
 
 
     #gameBoard = make2D(updatedBoardArr)
