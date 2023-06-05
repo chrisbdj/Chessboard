@@ -178,8 +178,8 @@ def get_possible_moves(coord):
     moves_for_square = [move for move in legalMoves if move.from_square == piecePickedUp] # Filter legal moves for the specific square
     for move in moves_for_square: #iterate the moves array.
         move_str = move.uci()
-        posi_moves = split_string(move_str, 2)
-
+        
+    posi_moves = split_string(move_str, 2)
     print("possible moves:", posi_moves)
     return posi_moves
 
