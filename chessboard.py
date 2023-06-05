@@ -201,8 +201,11 @@ def updateBoard(boardArr, updatedBoardArr):
             legalMoves = gameBoard.legal_moves # Get the legal moves for the specific square
             moves_for_square = [move for move in legalMoves if move.from_square == piecePickedUp] # Filter legal moves for the specific square
             for move in moves_for_square: #iterate the moves array.
-                print("possible moves:",move)
-                updateLED(str(convertCoordToLED(move)),2)
+                
+                move_str = move.uci()
+                #led = convertCoordToLED(move_str)
+                #updateLED(led,2)
+                print("possible moves:",move_str)
 
         if updatedBoardArr[sensorThatisDifferent] == 0:
             #piece is put down
