@@ -211,7 +211,7 @@ def updateBoard(boardArr, updatedBoardArr):
             possible_moves = get_possible_moves(coord)
             
             for move in possible_moves:
-                led = convertCoordToLED(possible_moves[move])
+                led = convertCoordToLED(move)
                 updateLED(led,2)
                 
 
@@ -224,7 +224,7 @@ def updateBoard(boardArr, updatedBoardArr):
                 possible_moves = get_possible_moves(coord)
 
                 for move in possible_moves:
-                    led = convertCoordToLED(possible_moves[move])
+                    led = convertCoordToLED(move)
                     updateLED(led,1)
 
             else:
