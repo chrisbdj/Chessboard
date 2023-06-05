@@ -173,6 +173,7 @@ def split_string(string, length):
 
 
 def get_possible_moves(coord):
+    posi_move = []
     piecePickedUp = chess.parse_square(coord) # Convert the square string to the square value
     legalMoves = gameBoard.legal_moves # Get the legal moves for the specific square
     moves_for_square = [move for move in legalMoves if move.from_square == piecePickedUp] # Filter legal moves for the specific square
