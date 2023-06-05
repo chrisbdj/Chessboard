@@ -194,7 +194,7 @@ def updateBoard(boardArr, updatedBoardArr):
         print("Chess Coord of Raised Piece: ", coord)
         print("we converted the coord above back to the sensor: ", convertCoordToSensor(coord))
 
-        if updatedBoardArr[sensorThatisDifferent]== 0:
+        if updatedBoardArr[sensorThatisDifferent]== 1:
             #piece is picked up check moves
             piecesActivelyPickedUp.append(coord)
             piecePickedUp = chess.parse_square(coord) # Convert the square string to the square value
@@ -203,7 +203,7 @@ def updateBoard(boardArr, updatedBoardArr):
             for move in moves_for_square: #iterate the moves array.
                 print(move)
 
-        if updatedBoardArr[sensorThatisDifferent] == 1:
+        if updatedBoardArr[sensorThatisDifferent] == 0:
             #piece is put down
             
             idx = piecesActivelyPickedUp.index(coord) #search for coord of piece put down in actively picked up
