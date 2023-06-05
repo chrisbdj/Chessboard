@@ -184,13 +184,13 @@ def updateLED(led, state):
     elif state==3: #square is a possible take
         pixels[led] = (255, 0, 0)
 
-
+split_moves = []
 def updateBoard(boardArr, updatedBoardArr):
     differences = []
+    
     differences = whats_the_dif(boardArr, updatedBoardArr)
     for i in range(len(differences)):
         sensorThatisDifferent = differences[i]
-        updateLED(convertSensorToLED(sensorThatisDifferent), updatedBoardArr[sensorThatisDifferent])
         print("update on sensor: ",sensorThatisDifferent, " with state: ", updatedBoardArr[sensorThatisDifferent])
         coord = convertToCoordinate(sensorThatisDifferent)
         print("Chess Coord of Raised Piece: ", coord)
@@ -216,10 +216,16 @@ def updateBoard(boardArr, updatedBoardArr):
             if coord in piecesActivelyPickedUp:
                 idx = piecesActivelyPickedUp.index(coord) #search for coord of piece put down in actively picked up
                 piecesActivelyPickedUp.pop(idx)
+                for i in range(len(split_moves)):
+                    led = convertCoordToLED(split_moves[i])
+                    updateLED(led,1)
+                
+                split_moves = []
             else:
                 # Item not found in the list
                 print(coord," not found in actively raised pieces? maybe this is a take? ")
-            
+        
+        updateLED(convertSensorToLED(sensorThatisDifferent), updatedBoardArr[sensorThatisDifferent])    
 
 
     #gameBoard = make2D(updatedBoardArr)
