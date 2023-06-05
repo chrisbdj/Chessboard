@@ -7,10 +7,15 @@ import math
 import heapq
 import neopixel
 import board
+import chess
+import chess.engine
 
 gameState = False
 preBoard = []
-gameBoard = []
+piecesActivelyPickedUp = []
+
+# Create a new chess board
+gameBoard = chess.Board()
 
 
 GPIO.setwarnings(False)
@@ -55,8 +60,10 @@ class SN74LS165:
 
 
 def startNewGame():
+    #Light up the entire board
     lightBoard(preBoard)
-
+    # Set up the board with a specific position
+    board.set_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
 
 
 def arrays_equal(A, B):
@@ -79,8 +86,8 @@ def whats_the_dif(A, B):
     return differences
 
 #Take arr and make it 2d
-def make2D(arr):
-    return [arr[i:i+8] for i in range(0, len(arr), 8)]
+#def make2D(arr):
+#    return [arr[i:i+8] for i in range(0, len(arr), 8)]
 
 
 
@@ -113,26 +120,11 @@ def convertSensorToLED(num):
        converted_num = (column*8)+XinColumn#recalculate the new LED number with column reversed
     return converted_num
 
-def updateLED(num, state):
-    led = convertSensorToLED(num)
-
-    if state==0: #square is occupied
-        pixels[led] = (51, 51, 191)
-    elif state==1: #square is empty
-        pixels[led] = (255, 0, 102)
-    elif state==2: #square is a possible move
-        pixels[led] = (0, 0, 255)
-    elif state==3: #square is a possible take
-        pixels[led] = (255, 0, 0)
-
-
 def convertToCoordinate(num):
     rank = (num+1) % 8 #ranks and the horizontal rows which are numbered. 1-8 going up from white rook. 8 is now 0 in code.
-    if rank==0:
+    if rank==0: #8 reduced to lowest denominator is 0, which doesnt work for me or my board. Easy correction for that
         rank=8
     
-    
-
     letter=["a","b","c","d","e","f","g","h"]
     file=math.floor(num/8) #file is the vertical columns which are lettered a-h going from white rook across naturally
     file=7-file
@@ -154,10 +146,41 @@ def convertCoordToSensor(coord):
     except ValueError:
         return "letter cant be found"
     
+def convertCoordToLED(coord):
+    try:
+        letter = ["a", "b", "c", "d", "e", "f", "g", "h"]  # alphabet for reference
+        letter_to_find = coord[0]  # isolate the letter at the start of the string
+        idx = letter.index(letter_to_find)  # search for the isolated letter in the array
+        rank = int(coord[1]) #isolate the number in coordinate
+        idx = 7 - idx #reverse index because the coordinate system is backwards from sensors.
+
+        # LED ROWS ARE REVERSED EVERY OTHER ROW IN HARDWARE, THIS IS COMPENSATING FOR THAT
+        led = idx * 8 + rank - 1  # calculate the LED number from the coordinate
+        column = led // 8  # calculate column index
+        XinColumn = led % 8  # reduce where in the column the LED will be
+        if column % 2 == 1:  # detect if column is odd
+            XinColumn = 7 - XinColumn  # reverse order if column is odd
+        led = column * 8 + XinColumn  # recalculate the new LED number with column reversed
+
+        return led
+    except ValueError:
+        return "Letter not found"
 
 
 
 
+
+def updateLED(num, state):
+    led = convertSensorToLED(num)
+
+    if state==0: #square is occupied
+        pixels[led] = (51, 51, 191)
+    elif state==1: #square is empty
+        pixels[led] = (255, 0, 102)
+    elif state==2: #square is a possible move
+        pixels[led] = (0, 0, 255)
+    elif state==3: #square is a possible take
+        pixels[led] = (255, 0, 0)
 
 
 def updateBoard(boardArr, updatedBoardArr):
@@ -171,14 +194,48 @@ def updateBoard(boardArr, updatedBoardArr):
         print("Chess Coord of Raised Piece: ", coord)
         print("we converted the coord above back to the sensor: ", convertCoordToSensor(coord))
 
+        if updatedBoardArr(sensorThatisDifferent) == 0:
+            #piece is picked up check moves
+            piecesActivelyPickedUp.append(coord)
+            piecePickedUp = chess.parse_square(coord) # Convert the square string to the square value
+            legalMoves = board.legal_moves # Get the legal moves for the specific square
+            moves_for_square = [move for move in legalMoves if move.from_square == piecePickedUp] # Filter legal moves for the specific square
+            for move in moves_for_square: #iterate the moves array.
+                print(move)
+
+        if updatedBoardArr(sensorThatisDifferent) == 1:
+            #piece is put down
+            
+            idx = piecesActivelyPickedUp.index(coord) #search for coord of piece put down in actively picked up
+            piecesActivelyPickedUp.pop(idx)
 
 
-    gameBoard = make2D(updatedBoardArr)
+    #gameBoard = make2D(updatedBoardArr)
 
 
 
+def handleButtons(buttonsArr):
+    if buttonsArr[0] == 1:
+        #whites turn end button
+        if gameBoard.turn:
+            move = chess.Move.from_uci("e2e4")  # Example move: Pawn from e2 to e4
+            gameBoard.push(move) # Push the move to the board
 
+    if buttonsArr[1] == 1:
+        #blacks turn end button
+        if not gameBoard.turn:
+            move = chess.Move.from_uci("e2e4")  # Example move: Pawn from e2 to e4
+            gameBoard.push(move) # Push the move to the board
+    if buttonsArr[2] == 1:
+        engine = chess.engine.SimpleEngine.popen_uci("path/to/stockfish")
 
+        # Assume 'board' is the current chess board object
+        result = engine.play(gameBoard, chess.engine.Limit(time=2.0))
+        suggested_move = result.move
+
+        print("Suggested move:", board.san(suggested_move))
+
+        engine.quit()
 
 
 
@@ -187,7 +244,7 @@ if __name__ == '__main__':
     GPIO.setmode(GPIO.BCM)
     #init game board shift registers
     shiftr = SN74LS165(clock=11, latch=7, data=9, clock_enable=8, num_chips=8)
-
+    #buttons = SN74LS165(clock=11, latch=7, data=15, clock_enable=8, num_chips=2)
     preBoard = shiftr.read_shift_regs()
     #STARTGAME
     if gameState == False:
@@ -204,6 +261,11 @@ if __name__ == '__main__':
                 #update array for initial change test
                 preBoard = shiftBoard[:]
                 
+
+            #buttonListener = buttons.read_shift_regs()
+            #handleButtons(buttonListener)
+
+
 
             time.sleep(0.05)
     except KeyboardInterrupt:
