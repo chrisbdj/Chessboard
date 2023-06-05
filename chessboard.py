@@ -220,7 +220,7 @@ def updateBoard(boardArr, updatedBoardArr):
                     led = convertCoordToLED(possible_moves[j])
                     updateLED(led,1)
                 
-                possible_moves = []
+                #possible_moves = []
             else:
                 # Item not found in the list
                 print(coord," not found in actively raised pieces? maybe this is a take? ")
