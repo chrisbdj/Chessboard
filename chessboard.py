@@ -187,6 +187,7 @@ def updateLED(led, state):
 
 
 def updateBoard(boardArr, updatedBoardArr):
+    global possible_moves
     differences = []
     differences = whats_the_dif(boardArr, updatedBoardArr)
     for i in range(len(differences)):
@@ -216,11 +217,11 @@ def updateBoard(boardArr, updatedBoardArr):
             if coord in piecesActivelyPickedUp:
                 idx = piecesActivelyPickedUp.index(coord) #search for coord of piece put down in actively picked up
                 piecesActivelyPickedUp.pop(idx)
-                for j in range(len(possible_moves)):
-                    led = convertCoordToLED(possible_moves[j])
+                for i in range(len(possible_moves)):
+                    led = convertCoordToLED(possible_moves[i])
                     updateLED(led,1)
                 
-                #possible_moves = []
+                possible_moves = []
             else:
                 # Item not found in the list
                 print(coord," not found in actively raised pieces? maybe this is a take? ")
