@@ -310,12 +310,9 @@ if __name__ == '__main__':
                 preBoard = shiftBoard[:]
                 print(preBoard)
 
-            # Read the touch inputs
-            is_touched = [GPIO.input(pin) == GPIO.LOW for pin in touch_pins]
-
-            # Use the touch inputs in your code as needed
-            for i, touched in enumerate(is_touched):
-                if touched:
+            # Read the touch inputs and perform actions based on pin state
+            for i, pin in enumerate(touch_pins):
+                if GPIO.input(pin) == GPIO.HIGH:
                    # handleButtons(i)
                     print(f"Sensor {i+1} is touched!")
             
