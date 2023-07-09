@@ -233,15 +233,7 @@ def updateBoard(boardArr, updatedBoardArr):
 
             else:
                 # Item not found in the list
-                for pieces in piecesActivelyPickedUp:
-                    possible_moves = get_possible_moves(pieces)
-                    for move in possible_moves:
-                        fen = pieces+coord
-                        if move == fen:
-                            current_move.append(fen)
-                            idx = piecesActivelyPickedUp.index(pieces) #search for coord of piece put down in actively picked up
-                            piecesActivelyPickedUp.pop(idx)
-                            print(current_move)
+                
                 
                 
                 print(coord," not found in actively raised pieces? maybe this is a take? ")
