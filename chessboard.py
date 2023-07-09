@@ -318,8 +318,6 @@ if __name__ == '__main__':
                 if touched:
                    # handleButtons(i)
                     print(f"Sensor {i+1} is touched!")
-                else:
-                    print(f"Sensor {i+1} is not touched.")
             
 
 
