@@ -312,8 +312,8 @@ if __name__ == '__main__':
 
             # Read the touch inputs and perform actions based on pin state
             for i, pin in enumerate(touch_pins):
-                if GPIO.input(pin) == GPIO.HIGH:
-                   # handleButtons(i)
+                if GPIO.input(pin) == GPIO.LOW:
+                    handleButtons(i)
                     print(f"Sensor {i+1} is touched!")
             
 
