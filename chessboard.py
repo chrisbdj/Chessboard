@@ -211,7 +211,7 @@ def updateBoard(boardArr, updatedBoardArr):
 
         print("Chess Coord of Manipulated Piece: ", coord, "state:",updatedBoardArr[sensorThatisDifferent])
         print("we converted the coord above back to the sensor: ", convertCoordToSensor(coord))
-        possible_moves = []
+        possible_moves = get_possible_moves(coord)
         if updatedBoardArr[sensorThatisDifferent]== 1:
             #piece is picked up check moves
             possible_moves = get_possible_moves(coord)
