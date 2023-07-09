@@ -264,6 +264,7 @@ def handleButtons(button):
                 move = chess.Move.from_uci(current_move[0])
                 gameBoard.push(move) # Push the move to the board
 
+                current_move = []
                 piecesActivelyPickedUp = [] #clear pieces array if turn successful
 
     if button == 2:
@@ -274,6 +275,7 @@ def handleButtons(button):
                 move = chess.Move.from_uci(current_move[0])
                 gameBoard.push(move) # Push the move to the board
 
+                current_move = []
                 piecesActivelyPickedUp = [] #clear pieces array if turn successful
     
     
