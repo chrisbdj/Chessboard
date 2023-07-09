@@ -14,6 +14,8 @@ import chess.engine
 gameState = False
 preBoard = []
 piecesActivelyPickedUp = []
+current_move = []
+
 
 # Create a new chess board
 gameBoard = chess.Board()
@@ -198,8 +200,9 @@ def updateLED(led, state):
         pixels[led] = (255, 0, 0)
 
 
-current_move = []
+
 def updateBoard(boardArr, updatedBoardArr):
+    global current_move
     differences = []
     differences = whats_the_dif(boardArr, updatedBoardArr)
     for i in range(len(differences)):
@@ -256,6 +259,7 @@ def updateBoard(boardArr, updatedBoardArr):
 
 
 def handleButtons(button):
+    global current_move
     if button == 0:
         #whites turn end button
         print("White turn End!")
