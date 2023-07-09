@@ -9,7 +9,6 @@ import neopixel
 import board
 import chess
 import chess.engine
-import touchio
 
 
 gameState = False
