@@ -9,6 +9,8 @@ import neopixel
 import board
 import chess
 import chess.engine
+import touchio
+
 
 gameState = False
 preBoard = []
@@ -239,8 +241,8 @@ def updateBoard(boardArr, updatedBoardArr):
 
 
 
-def handleButtons(buttonsArr):
-    if buttonsArr[0] == 1:
+def handleButtons(button):
+    if button == 0:
         #whites turn end button
         if gameBoard.turn:
             move = chess.Move.from_uci("e2e4")  # Example move: Pawn from e2 to e4
@@ -248,7 +250,7 @@ def handleButtons(buttonsArr):
 
             piecesActivelyPickedUp = [] #clear pieces array if turn successful
 
-    if buttonsArr[1] == 1:
+    if button == 2:
         #blacks turn end button
         if not gameBoard.turn:
             move = chess.Move.from_uci("e2e4")  # Example move: Pawn from e2 to e4
@@ -257,7 +259,18 @@ def handleButtons(buttonsArr):
             piecesActivelyPickedUp = [] #clear pieces array if turn successful
     
     
-    if buttonsArr[2] == 1:
+    if button == 1:
+        engine = chess.engine.SimpleEngine.popen_uci("path/to/stockfish")
+
+        # Assume 'board' is the current chess board object
+        result = engine.play(gameBoard, chess.engine.Limit(time=2.0))
+        suggested_move = result.move
+
+        print("Suggested move:", gameBoard.san(suggested_move))
+
+        engine.quit()
+    
+    if button == 3:
         engine = chess.engine.SimpleEngine.popen_uci("path/to/stockfish")
 
         # Assume 'board' is the current chess board object
@@ -275,6 +288,10 @@ if __name__ == '__main__':
     GPIO.setmode(GPIO.BCM)
     #init game board shift registers
     shiftr = SN74LS165(clock=11, latch=7, data=9, clock_enable=8, num_chips=8)
+    # Set up the GPIO touch pins as inputs
+    touch_pins = [11, 13, 15, 16]
+    for pin in touch_pins:
+        GPIO.setup(pin, GPIO.IN)
 
     preBoard = shiftr.read_shift_regs()
     #STARTGAME
@@ -294,6 +311,13 @@ if __name__ == '__main__':
                 preBoard = shiftBoard[:]
                 print(preBoard)
 
+            # Read the touch inputs
+            is_touched = [GPIO.input(pin) for pin in touch_pins]
+
+            # Use the touch inputs in your code as needed
+            for i, touched in enumerate(is_touched):
+                if touched:
+                    handleButtons(i)
             
 
 
