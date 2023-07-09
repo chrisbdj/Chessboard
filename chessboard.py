@@ -258,27 +258,27 @@ def handleButtons(button):
             piecesActivelyPickedUp = [] #clear pieces array if turn successful
     
     
-    if button == 1:
-        engine = chess.engine.SimpleEngine.popen_uci("path/to/stockfish")
+    #if button == 1:
+       # engine = chess.engine.SimpleEngine.popen_uci("path/to/stockfish")
 
         # Assume 'board' is the current chess board object
-        result = engine.play(gameBoard, chess.engine.Limit(time=2.0))
-        suggested_move = result.move
+        #result = engine.play(gameBoard, chess.engine.Limit(time=2.0))
+        #suggested_move = result.move
 
-        print("Suggested move:", gameBoard.san(suggested_move))
+        #print("Suggested move:", gameBoard.san(suggested_move))
 
-        engine.quit()
+        #engine.quit()
     
-    if button == 3:
-        engine = chess.engine.SimpleEngine.popen_uci("path/to/stockfish")
+    #if button == 3:
+        #engine = chess.engine.SimpleEngine.popen_uci("path/to/stockfish")
 
         # Assume 'board' is the current chess board object
-        result = engine.play(gameBoard, chess.engine.Limit(time=2.0))
-        suggested_move = result.move
+        #result = engine.play(gameBoard, chess.engine.Limit(time=2.0))
+        #suggested_move = result.move
 
-        print("Suggested move:", gameBoard.san(suggested_move))
+        #print("Suggested move:", gameBoard.san(suggested_move))
 
-        engine.quit()
+        #engine.quit()
 
 
 
@@ -316,7 +316,10 @@ if __name__ == '__main__':
             # Use the touch inputs in your code as needed
             for i, touched in enumerate(is_touched):
                 if touched:
-                    handleButtons(i)
+                   # handleButtons(i)
+                    print(f"Sensor {i+1} is touched!")
+                else:
+                    print(f"Sensor {i+1} is not touched.")
             
 
 
