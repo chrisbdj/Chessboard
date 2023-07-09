@@ -311,7 +311,7 @@ if __name__ == '__main__':
                 print(preBoard)
 
             # Read the touch inputs
-            is_touched = [GPIO.input(pin) == GPIO.HIGH for pin in touch_pins]
+            is_touched = [GPIO.input(pin) == GPIO.LOW for pin in touch_pins]
 
             # Use the touch inputs in your code as needed
             for i, touched in enumerate(is_touched):
