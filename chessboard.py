@@ -240,14 +240,17 @@ def updateBoard(boardArr, updatedBoardArr):
                     possible_moves = get_possible_moves(pieces)
                     print(pieces+"picked up")
                     for move in possible_moves:
+
+                        led = split_string(move, 2)
+                        print("possible moves v2:", led[1])
+                        led = convertCoordToLED(led[1])
+                        updateLED(led,1)
+
                         fen = pieces+coord
                         if move == fen:
                             current_move.append(fen)
 
-                            led = split_string(move, 2)
-                            print("possible moves v2:", led[1])
-                            led = convertCoordToLED(led[1])
-                            updateLED(led,1)
+                            
 
                             idx = piecesActivelyPickedUp.index(pieces)
                             piecesActivelyPickedUp.pop(idx)
