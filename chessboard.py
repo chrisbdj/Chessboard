@@ -198,6 +198,7 @@ def updateLED(led, state):
         pixels[led] = (255, 0, 0)
 
 
+current_move = []
 def updateBoard(boardArr, updatedBoardArr):
     differences = []
     differences = whats_the_dif(boardArr, updatedBoardArr)
@@ -207,9 +208,10 @@ def updateBoard(boardArr, updatedBoardArr):
 
         print("Chess Coord of Manipulated Piece: ", coord, "state:",updatedBoardArr[sensorThatisDifferent])
         print("we converted the coord above back to the sensor: ", convertCoordToSensor(coord))
-        possible_moves = get_possible_moves(coord)
+        
         if updatedBoardArr[sensorThatisDifferent]== 1:
             #piece is picked up check moves
+            possible_moves = get_possible_moves(coord)
             piecesActivelyPickedUp.append(coord)
             for move in possible_moves:
                 led = split_string(move, 2)
@@ -231,6 +233,17 @@ def updateBoard(boardArr, updatedBoardArr):
 
             else:
                 # Item not found in the list
+                for pieces in piecesActivelyPickedUp:
+                    possible_moves = get_possible_moves(pieces)
+                    for move in possible_moves:
+                        fen = pieces+coord
+                        if move == fen:
+                            current_move.append(fen)
+                            idx = piecesActivelyPickedUp.index(coord) #search for coord of piece put down in actively picked up
+                            piecesActivelyPickedUp.pop(idx)
+                            print(current_move)
+                
+                
                 print(coord," not found in actively raised pieces? maybe this is a take? ")
         
         updateLED(convertSensorToLED(sensorThatisDifferent), updatedBoardArr[sensorThatisDifferent])    
@@ -243,6 +256,7 @@ def updateBoard(boardArr, updatedBoardArr):
 def handleButtons(button):
     if button == 0:
         #whites turn end button
+        print("White turn End!")
         if gameBoard.turn:
             move = chess.Move.from_uci("e2e4")  # Example move: Pawn from e2 to e4
             gameBoard.push(move) # Push the move to the board
@@ -251,14 +265,16 @@ def handleButtons(button):
 
     if button == 2:
         #blacks turn end button
+        print("Black turn End!")
         if not gameBoard.turn:
-            move = chess.Move.from_uci("e2e4")  # Example move: Pawn from e2 to e4
+            move = chess.Move.from_uci("e7e6")  # Example move: Pawn from e2 to e4
             gameBoard.push(move) # Push the move to the board
 
             piecesActivelyPickedUp = [] #clear pieces array if turn successful
     
     
-    #if button == 1:
+    if button == 1:
+        print("White Hint Button!")
        # engine = chess.engine.SimpleEngine.popen_uci("path/to/stockfish")
 
         # Assume 'board' is the current chess board object
@@ -269,7 +285,8 @@ def handleButtons(button):
 
         #engine.quit()
     
-    #if button == 3:
+    if button == 3:
+        print("Black Hint Button!")
         #engine = chess.engine.SimpleEngine.popen_uci("path/to/stockfish")
 
         # Assume 'board' is the current chess board object
@@ -314,7 +331,7 @@ if __name__ == '__main__':
             for i, pin in enumerate(touch_pins):
                 if GPIO.input(pin) == GPIO.LOW:
                     handleButtons(i)
-                    print(f"Sensor {i+1} is touched!")
+                    
             
 
 
