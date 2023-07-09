@@ -288,7 +288,7 @@ if __name__ == '__main__':
     #init game board shift registers
     shiftr = SN74LS165(clock=11, latch=7, data=9, clock_enable=8, num_chips=8)
     # Set up the GPIO touch pins as inputs
-    touch_pins = [11, 13, 15, 16]
+    touch_pins = [17, 27, 22, 23]
     for pin in touch_pins:
         GPIO.setup(pin, GPIO.IN)
 
