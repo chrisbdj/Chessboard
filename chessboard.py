@@ -247,8 +247,6 @@ def updateBoard(boardArr, updatedBoardArr):
                             print(current_move)
                 
                 
-                
-                print(coord," not found in actively raised pieces? maybe this is a take? ")
         
         updateLED(convertSensorToLED(sensorThatisDifferent), updatedBoardArr[sensorThatisDifferent])    
 
@@ -262,19 +260,21 @@ def handleButtons(button):
         #whites turn end button
         print("White turn End!")
         if gameBoard.turn:
-            move = chess.Move.from_uci("e2e4")  # Example move: Pawn from e2 to e4
-            gameBoard.push(move) # Push the move to the board
+            if len(current_move) == 1:
+                move = chess.Move.from_uci(current_move[0])
+                gameBoard.push(move) # Push the move to the board
 
-            piecesActivelyPickedUp = [] #clear pieces array if turn successful
+                piecesActivelyPickedUp = [] #clear pieces array if turn successful
 
     if button == 2:
         #blacks turn end button
         print("Black turn End!")
         if not gameBoard.turn:
-            move = chess.Move.from_uci("e7e6")  # Example move: Pawn from e2 to e4
-            gameBoard.push(move) # Push the move to the board
+            if len(current_move) == 1:
+                move = chess.Move.from_uci(current_move[0])
+                gameBoard.push(move) # Push the move to the board
 
-            piecesActivelyPickedUp = [] #clear pieces array if turn successful
+                piecesActivelyPickedUp = [] #clear pieces array if turn successful
     
     
     if button == 1:
